@@ -3,95 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women's Day Celebration</title>
+    <title>Happy Women's Day</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        #loading { display: none; }
-        #greeting { display: none; }
-        #game { display: none; }
-        .heart { width: 50px; height: 50px; background: red; display: inline-block; margin: 5px; }
-        #messages { display: none; }
+        body {
+            margin: 0;
+            font-family: 'Great Vibes', cursive;
+            background: linear-gradient(to right, #7b1fa2, #ab47bc);
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        h1 {
+            margin-top: 20%;
+            font-size: 3em;
+        }
+        #greeting {
+            display: none;
+            margin-top: 20%;
+        }
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: pink;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            animation: float 2s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        #popped-message {
+            display: none;
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+        }
     </style>
 </head>
 <body>
-    <div id="loading">
+    <div id="loading-page">
         <h1>Loading...</h1>
     </div>
+
     <div id="greeting">
         <h1>Happy Women's Day!</h1>
-        <input type="text" id="name" placeholder="Enter your name" />
-        <input type="file" id="image" accept="image/*" />
-        <button onclick="startGame()">Start</button>
+        <input type="text" id="nameInput" placeholder="Enter your name">
+        <input type="file" id="imageUpload">
+        <button id="startGame">Start Game</button>
     </div>
-    <div id="game">
-        <h1>Heart Popping Game!</h1>
-        <div id="hearts"></div>
-        <div id="messages"></div>
-    </div>
+
     <script>
-        const loading = document.getElementById('loading');
-        const greeting = document.getElementById('greeting');
-        const game = document.getElementById('game');
-        const heartsDiv = document.getElementById('hearts');
-        const messagesDiv = document.getElementById('messages');
-        const customMessages = [
-            'You are amazing!',
-            'Keep shining!',
-            'You inspire us all!',
-            'Happy Women’s Day!'
-        ];
-
-        window.onload = function() {
-            loading.style.display = 'block';
-            setTimeout(() => {
-                loading.style.display = 'none';
-                greeting.style.display = 'block';
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.getElementById('loading-page').style.display = 'none';
+                document.getElementById('greeting').style.display = 'block';
             }, 2000);
-        };
 
-        function startGame() {
-            const name = document.getElementById('name').value;
-            const image = document.getElementById('image').files[0];
-            if (!name || !image) {
-                alert('Please enter your name and upload an image.');
-                return;
-            }
-            greeting.style.display = 'none';
-            game.style.display = 'block';
-            showHearts();
+            document.getElementById('startGame').addEventListener('click', function() {
+                const heartsCount = 20;
+                for (let i = 0; i < heartsCount; i++) {
+                    createHeart();
+                }
+            });
+        });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.top = Math.random() * window.innerHeight + 'px';
+            heart.addEventListener('click', function() {
+                heart.style.display = 'none';
+                revealMessage();
+            });
+            document.body.appendChild(heart);
         }
 
-        function showHearts() {
-            for (let i = 0; i < 10; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.onclick = function() { popHeart(heart); };
-                heartsDiv.appendChild(heart);
-            }
-        }
-
-        function popHeart(heart) {
-            const message = customMessages[Math.floor(Math.random() * customMessages.length)];
-            heart.style.display = 'none';
+        function revealMessage() {
+            const messages = ['You are amazing!', 'Keep shining!', 'Believe in yourself!', 'You are loved!'];
+            const message = messages[Math.floor(Math.random() * messages.length)];
             const messageDiv = document.createElement('div');
-            messageDiv.innerHTML = `<p>${message}</p>`;
-            if (messagesDiv.childElementCount < 4) { // limit to 4 messages
-                messagesDiv.appendChild(messageDiv);
-            }
-            if (messagesDiv.childElementCount === 4) {
-                endGame();
-            }
-        }
-
-        function endGame() {
-            const images = document.createElement('img');
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                images.src = e.target.result;
-                game.appendChild(images);
-            };
-            reader.readAsDataURL(document.getElementById('image').files[0]);
-            game.innerHTML += '<h2>Great job!</h2>';
+            messageDiv.id = 'popped-message';
+            messageDiv.innerText = message;
+            document.body.appendChild(messageDiv);
+            messageDiv.style.display = 'block';
+            setTimeout(() => messageDiv.remove(), 3000);
         }
     </script>
 </body>
