@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Women's Day!</title>
+    <title>Women's Day Celebration</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         #loading { display: none; }
         #greeting { display: none; }
+        #game { display: none; }
+        .heart { width: 50px; height: 50px; background: red; display: inline-block; margin: 5px; }
+        #messages { display: none; }
     </style>
 </head>
 <body>
@@ -16,41 +19,79 @@
     </div>
     <div id="greeting">
         <h1>Happy Women's Day!</h1>
-        <button onclick="startGame()">Play Heart Popping Game</button>
-        <div id="game" style="display:none;">
-            <h2>Pop the Hearts!</h2>
-            <div id="hearts"></div>
-        </div>
+        <input type="text" id="name" placeholder="Enter your name" />
+        <input type="file" id="image" accept="image/*" />
+        <button onclick="startGame()">Start</button>
+    </div>
+    <div id="game">
+        <h1>Heart Popping Game!</h1>
+        <div id="hearts"></div>
+        <div id="messages"></div>
     </div>
     <script>
-        // Show loading screen for 3 seconds
-        document.getElementById('loading').style.display = 'block';
-        setTimeout(() => {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('greeting').style.display = 'block';
-        }, 3000);
+        const loading = document.getElementById('loading');
+        const greeting = document.getElementById('greeting');
+        const game = document.getElementById('game');
+        const heartsDiv = document.getElementById('hearts');
+        const messagesDiv = document.getElementById('messages');
+        const customMessages = [
+            'You are amazing!',
+            'Keep shining!',
+            'You inspire us all!',
+            'Happy Women’s Day!'
+        ];
+
+        window.onload = function() {
+            loading.style.display = 'block';
+            setTimeout(() => {
+                loading.style.display = 'none';
+                greeting.style.display = 'block';
+            }, 2000);
+        };
 
         function startGame() {
-            document.getElementById('greeting').style.display = 'none';
-            document.getElementById('game').style.display = 'block';
-            createHearts();
+            const name = document.getElementById('name').value;
+            const image = document.getElementById('image').files[0];
+            if (!name || !image) {
+                alert('Please enter your name and upload an image.');
+                return;
+            }
+            greeting.style.display = 'none';
+            game.style.display = 'block';
+            showHearts();
         }
 
-        function createHearts() {
-            const heartsDiv = document.getElementById('hearts');
-            for (let i = 0; i < 5; i++) {
+        function showHearts() {
+            for (let i = 0; i < 10; i++) {
                 const heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.style.fontSize = '50px';
-                heart.style.cursor = 'pointer';
-                heart.style.position = 'absolute';
-                heart.style.top = Math.random() * 100 + '%';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.onclick = function () {
-                    heartsDiv.removeChild(heart);
-                };
+                heart.className = 'heart';
+                heart.onclick = function() { popHeart(heart); };
                 heartsDiv.appendChild(heart);
             }
+        }
+
+        function popHeart(heart) {
+            const message = customMessages[Math.floor(Math.random() * customMessages.length)];
+            heart.style.display = 'none';
+            const messageDiv = document.createElement('div');
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            if (messagesDiv.childElementCount < 4) { // limit to 4 messages
+                messagesDiv.appendChild(messageDiv);
+            }
+            if (messagesDiv.childElementCount === 4) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            const images = document.createElement('img');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                images.src = e.target.result;
+                game.appendChild(images);
+            };
+            reader.readAsDataURL(document.getElementById('image').files[0]);
+            game.innerHTML += '<h2>Great job!</h2>';
         }
     </script>
 </body>
