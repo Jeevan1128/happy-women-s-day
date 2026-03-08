@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Women's Day!</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #loading { display: none; }
+        #greeting { display: none; }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <h1>Loading...</h1>
+    </div>
+    <div id="greeting">
+        <h1>Happy Women's Day!</h1>
+        <button onclick="startGame()">Play Heart Popping Game</button>
+        <div id="game" style="display:none;">
+            <h2>Pop the Hearts!</h2>
+            <div id="hearts"></div>
+        </div>
+    </div>
+    <script>
+        // Show loading screen for 3 seconds
+        document.getElementById('loading').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('greeting').style.display = 'block';
+        }, 3000);
+
+        function startGame() {
+            document.getElementById('greeting').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            createHearts();
+        }
+
+        function createHearts() {
+            const heartsDiv = document.getElementById('hearts');
+            for (let i = 0; i < 5; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.fontSize = '50px';
+                heart.style.cursor = 'pointer';
+                heart.style.position = 'absolute';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.onclick = function () {
+                    heartsDiv.removeChild(heart);
+                };
+                heartsDiv.appendChild(heart);
+            }
+        }
+    </script>
+</body>
+</html>
