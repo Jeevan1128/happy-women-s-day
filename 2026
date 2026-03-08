@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Women's Day</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- LOADING PAGE -->
+    <div id="loadingPage" class="page">
+        <div class="loader"></div>
+        <h1>Loading...</h1>
+    </div>
+
+    <!-- GREETING PAGE -->
+    <div id="greetingPage" class="page" style="display:none;">
+        <h1>🌸 Happy Women's Day! 🌸</h1>
+        <div class="greeting-container">
+            <input type="text" id="nameInput" placeholder="Enter your name" class="input-field">
+            <input type="file" id="imageInput" accept="image/*" class="input-field">
+            <button onclick="startMagic()" class="magic-btn">✨ Start with Magic ✨</button>
+        </div>
+        <div id="greetingOutput"></div>
+    </div>
+
+    <!-- GAME PAGE -->
+    <div id="gamePage" class="page" style="display:none;">
+        <h1>💖 Pop the Hearts! 💖</h1>
+        <p id="personName" style="font-size: 24px; color: #ff69b4;"></p>
+        <div id="heartContainer" class="heart-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
